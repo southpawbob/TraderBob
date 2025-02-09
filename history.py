@@ -27,34 +27,39 @@ import requests
 import requests_cache
 import json
 
-
-import pandas as pd
-
-import pandas as pd
-from bokeh.plotting import curdoc
+from bokeh.plotting import curdoc, show
 from bokeh.models import ColumnDataSource
 from bokeh.models.widgets import DataTable, TableColumn
 
+import requests
 
-url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&price_change_percentage=1h%2C24h%2C1y&precision=full"
+url = "https://api.coingecko.com/api/v3/coins/list?include_platform=true"
+
 
 headers = {
     "accept": "application/json",
-   # "x-cg-demo-api-key": "CG-ULEXj9kgbnAK2kGvieVgsDBL"
+    #"x-cg-demo-api-key": "CG-ULEXj9kgbnAK2kGvieVgsDBL"
 }
 
-#session = CachedSession('demo_cache', cache_control=True)
-#session = CachedSession('demo_cache', )
 requests_cache.install_cache('demo_cache')
 
 response = requests.get(url, headers=headers)
 json_data = json.loads(response.text)
 
-with open("markets.json", "w") as file:
+with open("coins.json", "w") as file:
     file.write(json.dumps(json_data))
 
-df = pd.read_json(response.text)
-columns = ['id', 'symbol', 'name', 'current_price', 'market_cap', 'total_volume', 'price_change_percentage_24h']
+df_orig = pd.read_json(response.text)
+
+
+df = df_orig[df_orig['platforms'].apply(lambda x: "solana" in x)]
+
+print(df_orig)
+
+
+             
+columns = ['id', 'symbol', 'name', 'platforms'
+           ]
 # Create a ColumnDataSource from the Pandas DataFrame
 source = ColumnDataSource(df)
 
@@ -63,6 +68,5 @@ columns = [TableColumn(field=col, title=col) for col in columns]
 
 # Create DataTable widget
 data_table = DataTable(source=source, columns=columns, width=400, height=280, sizing_mode='stretch_both')
-
 
 curdoc().add_root(data_table)
