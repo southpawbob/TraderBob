@@ -1,0 +1,42 @@
+<!-- HTML (Frontend) - index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart"></canvas>
+    <script>
+    async function fetchData() {
+        const response = await fetch('/graph_data');
+        const data = await response.json();
+        return data;
+    }
+
+    async function renderChart() {
+        const data = await fetchData();
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.nodes.map(node => node.id),
+                datasets: [{
+                    label: 'Graph Data',
+                    data: data.nodes.map(node => Math.random() * 100),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    renderChart();
+    </script>
+</body>
+</html>
