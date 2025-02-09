@@ -50,7 +50,7 @@ requests_cache.install_cache('demo_cache')
 response = requests.get(url, headers=headers)
 json_data = json.loads(response.text)
 
-with open("markets.json", "w") as file:
+with open("markets.json", "w") as file: 
     file.write(json.dumps(json_data))
 
 df = pd.read_json(response.text)
