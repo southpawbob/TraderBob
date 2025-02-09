@@ -1,0 +1,2 @@
+# TraderBob
+Python trading program
