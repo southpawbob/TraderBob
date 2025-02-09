@@ -1,6 +1,7 @@
 # Python (Flask) - server.py
 from flask import Flask, jsonify, render_template
 import networkx as nx
+from pycoingecko import CoinGeckoAPI
 
 app = Flask(__name__)
 @app.route('/')
@@ -13,6 +14,11 @@ def get_graph_data():
     graph = nx.Graph()
     graph.add_edges_from([(1, 2), (2, 3), (3, 1)])
     data = nx.node_link_data(graph)
+
+    cg = CoinGeckoAPI()
+    x = cg.get_coins_markets()
+    print(x)
+
     return jsonify(data)
 
 if __name__ == '__main__':
