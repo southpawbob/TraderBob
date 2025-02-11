@@ -41,7 +41,7 @@ headers = {
     #"x-cg-demo-api-key": "CG-ULEXj9kgbnAK2kGvieVgsDBL"
 }
 
-requests_cache.install_cache('demo_cache')
+requests_cache.install_cache('cache')
 
 response = requests.get(url, headers=headers)
 json_data = json.loads(response.text)

@@ -11,7 +11,7 @@ import decimal
 
 #session = CachedSession('demo_cache', cache_control=True)
 #session = CachedSession('demo_cache', )
-requests_cache.install_cache('demo_cache')
+requests_cache.install_cache('cache')
 
 def convert_numbers_to_strings(obj):
     if isinstance(obj, float):
