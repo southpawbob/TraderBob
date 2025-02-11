@@ -56,7 +56,7 @@ df = df_orig[df_orig['platforms'].apply(lambda x: "solana" in x)]
 
 print(df_orig)
 
-
+df3 = df1.merge(df2, on = 'city', how = 'left')
              
 columns = ['id', 'symbol', 'name', 'platforms'
            ]
