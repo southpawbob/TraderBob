@@ -3,11 +3,8 @@ import requests_cache
 import json
 import time
 import pandas as pd
-from bokeh.plotting import curdoc, show
-from bokeh.models import ColumnDataSource
-from bokeh.models.widgets import DataTable, TableColumn
-import sys
-import decimal
+from nicegui import ui
+import plotly.graph_objects as go
 
 #session = CachedSession('demo_cache', cache_control=True)
 #session = CachedSession('demo_cache', )
@@ -114,14 +111,25 @@ for index, row in df.iterrows():
     coinTotal+=1
 
 print (f"Total coins: {coinTotal}")
-#fetch_coins_simple(coinIds)
-df_coins_simple = pd.read_pickle("coins_simple.pkl").transpose()
-print (df_coins_simple)
-df_coins_simple2 = pd.DataFrame()
-for index, row in df.df_coins_simple():
-    df_coins_simple2 += row['id']
+
+#print(df["sparkline_in_7d"].iloc[0])
+for index, row in df.iterrows():
+    with ui.row():
+        label = ui.label(row['id'])
+
+        values = row["sparkline_in_7d"].get('price')
+        #df2=pd.DataFrame({'x': , 'y':  })
+        #row.add_slot(ui.plotly(df2.plot('x', 'y')))
+        fig = go.Figure([go.Scatter(x=list(range(168)), y=values)])
+        fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
+        ui.plotly(fig).classes('w-full h-40')
+
+#
+row = ui.row()
+#row.add_slot(ui.label('label 1'))
+#values = df["sparkline_in_7d"].iloc[0].get('price')
+#df2=pd.DataFrame({'x': range(1,169), 'y': values })
+#row.add_slot(ui.plotly(df2.plot('x', 'y')))
 
 
-data_table = create_simple_table(df_coins_simple2)
-show(data_table)
-#curdoc().add_root(data_table)
+ui.run(show=False)
